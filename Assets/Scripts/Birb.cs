@@ -7,6 +7,7 @@ public class Birb : MonoBehaviour
     public static Birb Instance { get; private set; }
 
     public event Action OnGamingState;
+    public event Action OnHittingPipe;
 
     public enum State
     {
@@ -20,6 +21,7 @@ public class Birb : MonoBehaviour
     [SerializeField] private float speedMultiplier;
     private Rigidbody2D birbRigidbody2D;
     private const float GRAVITY_SCALE = 1f;
+    private bool isBirbAlive= true;
 
     private void Awake()
     {
@@ -46,7 +48,7 @@ public class Birb : MonoBehaviour
                 }break;
 
              case State.gaming:
-                if (Keyboard.current.spaceKey.isPressed)
+                if (Keyboard.current.spaceKey.isPressed && isBirbAlive)
                 {
                     birbRigidbody2D.AddForce(transform.up * Time.deltaTime * speedMultiplier);
                 }
@@ -60,4 +62,13 @@ public class Birb : MonoBehaviour
         }
         
     }
+    private void OnCollisionEnter2D(Collision2D collision2D)
+    {
+        if(collision2D.gameObject.TryGetComponent<TopPipe>(out TopPipe topPipe) || collision2D.gameObject.TryGetComponent<BottomPipe>(out BottomPipe bottomPipe))
+        {
+            isBirbAlive = false;
+            state=State.gameOver;
+        }
+    }
+
 }
