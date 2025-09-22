@@ -5,26 +5,38 @@ public class PipeSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject pipePrefab;
 
-    private Birb.State state;
+   
 
     private float timeInterval=0f ;
     private float maxTimeInterval = 0.9f;
-    private float heightOffset = 2f;
+    private float heightOffset = 2.5f;
+    private bool gameHasStarted;
 
     private void Start()
     {
-        CreatePipePrefab();
-    }
-    private void Update()
-    {      
+        Birb.Instance.OnGamingState += Birb_OnGamingState;
+        if (gameHasStarted)
+        {
             CreatePipePrefab();
+        }
+    }
+
+    private void Birb_OnGamingState()
+    {
+        gameHasStarted = true;
+    }
+
+    private void Update()
+    {
+        if (gameHasStarted) {
+            CreatePipePrefab();
+        }
     }
 
     private void CreatePipePrefab()
     {
 
-        if (state == Birb.State.gaming)
-        {
+        
             if (timeInterval >= maxTimeInterval)
             {
                 Instantiate(pipePrefab, new Vector3(transform.position.x, Random.Range(-heightOffset, heightOffset), 0), Quaternion.identity);
@@ -34,7 +46,7 @@ public class PipeSpawner : MonoBehaviour
             {
                 timeInterval += Time.deltaTime;
             }
-        }
+        
         
     }
 }

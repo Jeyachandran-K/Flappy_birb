@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Birb : MonoBehaviour
 {
     public static Birb Instance { get; private set; }
+
+    public event Action OnGamingState;
 
     public enum State
     {
@@ -38,6 +41,7 @@ public class Birb : MonoBehaviour
                 {
                     birbRigidbody2D.gravityScale = GRAVITY_SCALE;
                     state = State.gaming;
+                        OnGamingState?.Invoke();
                 }
                 }break;
 
