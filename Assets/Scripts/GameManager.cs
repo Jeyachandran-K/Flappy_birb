@@ -12,6 +12,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Birb.Instance.OnCrossingPipe += Birb_OnCrossingPipe;
+        retryButton.onClick.AddListener(() =>
+        {
+            SceneManager.LoadScene(0);
+        });
     }
 
     private void Birb_OnCrossingPipe()
@@ -23,10 +27,7 @@ public class GameManager : MonoBehaviour
     {
         statsText.text = score.ToString();
 
-        //retryButton.onClick.AddListener(() =>
-        //{
-        //    SceneManager.LoadScene(0);
-        //});
+       
     }
     
 }
