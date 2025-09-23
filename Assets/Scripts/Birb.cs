@@ -8,6 +8,8 @@ public class Birb : MonoBehaviour
 
     public event Action OnGamingState;
     public event Action OnHittingPipe;
+    public event Action OnCrossingPipe;
+    public event Action OnGameOver;
 
     public enum State
     {
@@ -67,8 +69,15 @@ public class Birb : MonoBehaviour
         if(collision2D.gameObject.TryGetComponent<TopPipe>(out TopPipe topPipe) || collision2D.gameObject.TryGetComponent<BottomPipe>(out BottomPipe bottomPipe))
         {
             isBirbAlive = false;
-            state=State.gameOver;
+            state = State.gameOver;
+            OnGameOver?.Invoke();
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.TryGetComponent<MiddlePipe>(out MiddlePipe middlePipe)){
+            OnCrossingPipe?.Invoke();
+        }
+    }
 }
